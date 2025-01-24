@@ -1,0 +1,25 @@
+depends = android
+linkerOpts = -llog
+noStringConversion = android_name_to_log_id
+package = platform.android.logging
+
+---
+
+#include <android/log.h>
+#include <unistd.h>
+
+// https://android.googlesource.com/platform/system/logging/+/main/liblog/include/log/log_id.h
+
+log_id_t android_name_to_log_id(const char* logName);
+const char* android_log_id_to_name(log_id_t log_id);
+
+// https://android.googlesource.com/platform/system/logging/+/main/liblog/include/log/log_read.h
+
+struct log_msg;
+struct logger;
+struct logger_list;
+
+struct logger_list* android_logger_list_alloc(int mode, unsigned int tail, pid_t pid);
+struct logger* android_logger_open(struct logger_list* logger_list, log_id_t id);
+int android_logger_list_read(struct logger_list* logger_list, struct log_msg* log_msg);
+void android_logger_list_free(struct logger_list* logger_list);
